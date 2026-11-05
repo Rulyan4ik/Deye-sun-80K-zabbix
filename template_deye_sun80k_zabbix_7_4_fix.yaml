@@ -1,0 +1,462 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: 31ce2f3a30c84b5e8ad6da0ba5a3f156
+      name: Templates/Deye
+    - uuid: 68298a4c421f460683767ca6acf371b3
+      name: 'Templates/Solar Systems'
+  templates:
+    - uuid: 90ae92697e25494bb996523cbffb2223
+      template: 'Deye SUN-80K SG02HP3'
+      name: 'Deye SUN-80K SG02HP3'
+      description: 'Deye SUN-80K-SG02HP3-EU-EM6 через Elfin EE11A. Усі елементи даних — Zabbix trapper. Одиниці: W, V, A, Hz, °C, %, kWh. Текст Warning/Fault надсилається скриптом v4.1 у форматі оригінальна назва Deye + український переклад.'
+      groups:
+        - name: Templates/Deye
+        - name: 'Templates/Solar Systems'
+      items:
+        - uuid: 9d3a70db33bb4368b624a7027798a641
+          name: 'Помилки: Загальний стан аварії'
+          type: TRAP
+          key: deye.alarm.active
+          history: 90d
+        - uuid: 18d8b929ed5f418db3a889d7b4753b57
+          name: 'Помилки: Загальний опис — оригінал + українською'
+          type: TRAP
+          key: deye.alarm.summary
+          history: 90d
+          value_type: TEXT
+        - uuid: 45766175743f4c7c810b1a2987c79fa3
+          name: 'АКБ: Потужність заряджання'
+          type: TRAP
+          key: deye.battery.charge_w
+          history: 90d
+          units: W
+        - uuid: 10ef98e2fba04aad8a1e4b248d3b5be4
+          name: 'АКБ: Струм'
+          type: TRAP
+          key: deye.battery.current_a
+          history: 90d
+          value_type: FLOAT
+          units: A
+        - uuid: 5621c853afa144f18d32b71c3c9a57d4
+          name: 'АКБ: Потужність розряджання'
+          type: TRAP
+          key: deye.battery.discharge_w
+          history: 90d
+          units: W
+        - uuid: b85a012697374eb6a129698d51be5624
+          name: 'АКБ: Потужність (+ розряд / − заряд)'
+          type: TRAP
+          key: deye.battery.power_w
+          history: 90d
+          value_type: FLOAT
+          units: W
+        - uuid: f24cedfeb3b849d7bfb4112ff22bdff1
+          name: 'АКБ: Рівень заряду'
+          type: TRAP
+          key: deye.battery.soc_pct
+          history: 90d
+          units: '%'
+        - uuid: 49ccbb74b47c43908fce544082eccd7f
+          name: 'АКБ: Температура'
+          type: TRAP
+          key: deye.battery.temp_c
+          history: 90d
+          units: °C
+        - uuid: a4bf65acde494bd082a5b4ab903e716d
+          name: 'АКБ: Напруга'
+          type: TRAP
+          key: deye.battery.voltage_v
+          history: 90d
+          units: V
+        - uuid: 79d5416489a546f9bf4fe0206e322e28
+          name: 'Deye: Зв''язок зі скриптом'
+          type: TRAP
+          key: deye.comm.ok
+          history: 90d
+          description: '1 — успішне опитування інвертора.'
+          triggers:
+            - uuid: 68bf6956d070472187f62ad5093ff2a7
+              expression: 'nodata(/Deye SUN-80K SG02HP3/deye.comm.ok,3m)=1'
+              name: 'Deye SUN-80K: Немає даних від інвертора понад 3 хвилини'
+              priority: HIGH
+              description: 'Zabbix не отримував успішних даних від скрипта Deye понад 3 хвилини.'
+        - uuid: 91813a5ef89b4305b5aa963c415d9691
+          name: 'Помилки: Є аварія Fault'
+          type: TRAP
+          key: deye.fault.active
+          history: 90d
+          triggers:
+            - uuid: afde2ab9884449dcaa5fa0cef122641c
+              expression: 'last(/Deye SUN-80K SG02HP3/deye.fault.active)=1'
+              name: 'Deye SUN-80K: АВАРІЯ FAULT'
+              priority: HIGH
+              description: 'Активний один або декілька кодів Fxx. Деталі див. у Fault summary.'
+        - uuid: 2fd14609762145bdac2ad4de754491c1
+          name: 'Помилки: Коди Fault'
+          type: TRAP
+          key: deye.fault.codes
+          history: 90d
+          value_type: TEXT
+        - uuid: 835b4fa84a0f4ef281d1a9d76976acfc
+          name: 'Помилки: Fault — оригінал + українською'
+          type: TRAP
+          key: deye.fault.summary
+          history: 90d
+          value_type: TEXT
+        - uuid: 1d420c6347b7449589fe3b52ee38d42f
+          name: 'Генератор: Загальна потужність'
+          type: TRAP
+          key: deye.gen.power_total_w
+          history: 90d
+          units: W
+        - uuid: 2ceafc97c1c54db0bc206deae47a78a5
+          name: 'Генератор L1: Напруга'
+          type: TRAP
+          key: deye.gen.voltage_l1_v
+          history: 90d
+          units: V
+        - uuid: ca5247287d2b4b70bcf1abf6c116a71c
+          name: 'Генератор L2: Напруга'
+          type: TRAP
+          key: deye.gen.voltage_l2_v
+          history: 90d
+          units: V
+        - uuid: 0f7e9625c0ac4d828db4b6b516c7d75e
+          name: 'Генератор L3: Напруга'
+          type: TRAP
+          key: deye.gen.voltage_l3_v
+          history: 90d
+          units: V
+        - uuid: 81ace05916a3482bbf3b4f83b0afff6d
+          name: 'Мережа L1: Потужність CT'
+          type: TRAP
+          key: deye.grid.ct_power_l1_w
+          history: 90d
+          value_type: FLOAT
+          units: W
+        - uuid: fb6aa399b2824348ad9c489f87c664ae
+          name: 'Мережа L2: Потужність CT'
+          type: TRAP
+          key: deye.grid.ct_power_l2_w
+          history: 90d
+          value_type: FLOAT
+          units: W
+        - uuid: c7a1d84914e247a48113346a4e58397d
+          name: 'Мережа L3: Потужність CT'
+          type: TRAP
+          key: deye.grid.ct_power_l3_w
+          history: 90d
+          value_type: FLOAT
+          units: W
+        - uuid: ad97169257c141e1a5106363eca35d99
+          name: 'Мережа: Експорт'
+          type: TRAP
+          key: deye.grid.export_w
+          history: 90d
+          units: W
+        - uuid: 0f3f3d13ddc54b8ea9d4fb26fb28df48
+          name: 'Мережа: Частота'
+          type: TRAP
+          key: deye.grid.frequency_hz
+          history: 90d
+          units: Hz
+        - uuid: 946013b1d92c484abc7f06260083d70a
+          name: 'Мережа: Імпорт'
+          type: TRAP
+          key: deye.grid.import_w
+          history: 90d
+          units: W
+        - uuid: a93fea5cde264566934ed90f98fdf10b
+          name: 'Мережа: Загальна потужність (+ імпорт / − експорт)'
+          type: TRAP
+          key: deye.grid.power_w
+          history: 90d
+          value_type: FLOAT
+          units: W
+        - uuid: 4646457db6cb4498a75f24ef14f6ab25
+          name: 'Мережа L1: Напруга'
+          type: TRAP
+          key: deye.grid.voltage_l1_v
+          history: 90d
+          units: V
+        - uuid: 644969be19de4fe4b96e91bcdfafe177
+          name: 'Мережа L2: Напруга'
+          type: TRAP
+          key: deye.grid.voltage_l2_v
+          history: 90d
+          units: V
+        - uuid: 4405b380216a496686c60fb1d5df3fe0
+          name: 'Мережа L3: Напруга'
+          type: TRAP
+          key: deye.grid.voltage_l3_v
+          history: 90d
+          units: V
+        - uuid: f992164b0cbd46309c625f403b2a62e3
+          name: 'Інвертор L1: Струм'
+          type: TRAP
+          key: deye.inverter.current_l1_a
+          history: 90d
+          units: A
+        - uuid: fc51756fd4014ab7a7074637f6051b9a
+          name: 'Інвертор L2: Струм'
+          type: TRAP
+          key: deye.inverter.current_l2_a
+          history: 90d
+          units: A
+        - uuid: 6565d3ead9774992b0522d8d9bb71e14
+          name: 'Інвертор L3: Струм'
+          type: TRAP
+          key: deye.inverter.current_l3_a
+          history: 90d
+          units: A
+        - uuid: bed8fc2bff914947bd5f4b2956d41408
+          name: 'Інвертор: Частота AC'
+          type: TRAP
+          key: deye.inverter.frequency_hz
+          history: 90d
+          units: Hz
+        - uuid: 5adebd9690254c51a6fea62e9099617c
+          name: 'Інвертор L1: Потужність'
+          type: TRAP
+          key: deye.inverter.power_l1_w
+          history: 90d
+          units: W
+        - uuid: 2f9274185f90415db89671ebe6ca43c5
+          name: 'Інвертор L2: Потужність'
+          type: TRAP
+          key: deye.inverter.power_l2_w
+          history: 90d
+          units: W
+        - uuid: fa3675063cbc41e38215450d306ec13b
+          name: 'Інвертор L3: Потужність'
+          type: TRAP
+          key: deye.inverter.power_l3_w
+          history: 90d
+          units: W
+        - uuid: ae2dc486e01f43a8a82b66f3db4b6a67
+          name: 'Інвертор: Загальна потужність AC'
+          type: TRAP
+          key: deye.inverter.power_total_w
+          history: 90d
+          units: W
+        - uuid: bea43c2c03c84f1f85868215b2b5a839
+          name: 'Інвертор L1: Напруга'
+          type: TRAP
+          key: deye.inverter.voltage_l1_v
+          history: 90d
+          units: V
+        - uuid: 5bd459b7e76a4b9a99b9d182924f0fe4
+          name: 'Інвертор L2: Напруга'
+          type: TRAP
+          key: deye.inverter.voltage_l2_v
+          history: 90d
+          units: V
+        - uuid: 1e57f39f12aa4b43a7c6583b6ddabe8d
+          name: 'Інвертор L3: Напруга'
+          type: TRAP
+          key: deye.inverter.voltage_l3_v
+          history: 90d
+          units: V
+        - uuid: 64c3dd1f28514058901b74a149acf0a3
+          name: 'Навантаження: Частота'
+          type: TRAP
+          key: deye.load.frequency_hz
+          history: 90d
+          units: Hz
+        - uuid: 239c2e9804864dc5979a9984c7ba1fbc
+          name: 'Навантаження L1: Потужність'
+          type: TRAP
+          key: deye.load.power_l1_w
+          history: 90d
+          units: W
+        - uuid: 1537fc8f1e6f4b42b58ca6e7e2b4e0b8
+          name: 'Навантаження L2: Потужність'
+          type: TRAP
+          key: deye.load.power_l2_w
+          history: 90d
+          units: W
+        - uuid: fd9dd521734f4e6dafdcc328ba874863
+          name: 'Навантаження L3: Потужність'
+          type: TRAP
+          key: deye.load.power_l3_w
+          history: 90d
+          units: W
+        - uuid: d92ff29e41774eb69867873c22036fd2
+          name: 'Навантаження: Загальна потужність'
+          type: TRAP
+          key: deye.load.power_total_w
+          history: 90d
+          units: W
+        - uuid: 01a17b94dfb04082bd616f9d577971e7
+          name: 'Навантаження L1: Напруга'
+          type: TRAP
+          key: deye.load.voltage_l1_v
+          history: 90d
+          units: V
+        - uuid: ff6c2732f7ef478895ccd7288a40a7bd
+          name: 'Навантаження L2: Напруга'
+          type: TRAP
+          key: deye.load.voltage_l2_v
+          history: 90d
+          units: V
+        - uuid: 2f922e0e97794dc6a97aca66f13ba1b7
+          name: 'Навантаження L3: Напруга'
+          type: TRAP
+          key: deye.load.voltage_l3_v
+          history: 90d
+          units: V
+        - uuid: 8f365e8cffa841a7932f59a6965a69a7
+          name: 'PV1: Розрахункова потужність V×A'
+          type: TRAP
+          key: deye.pv.channel1.calc_power_w
+          history: 90d
+          units: W
+        - uuid: a7c714b89aa741ae81b3e16673e2a01f
+          name: 'PV1: Струм'
+          type: TRAP
+          key: deye.pv.channel1.current_a
+          history: 90d
+          units: A
+        - uuid: a5b3fab4d9d342bd8815cd4c0cf69104
+          name: 'PV1: Потужність'
+          type: TRAP
+          key: deye.pv.channel1.power_w
+          history: 90d
+          units: W
+        - uuid: 3b0ed392ffd04be5842d90415b51933e
+          name: 'PV1: Напруга'
+          type: TRAP
+          key: deye.pv.channel1.voltage_v
+          history: 90d
+          units: V
+        - uuid: 2fe1eba69ffe44e08eedae943cbe81dd
+          name: 'PV2: Розрахункова потужність V×A'
+          type: TRAP
+          key: deye.pv.channel2.calc_power_w
+          history: 90d
+          units: W
+        - uuid: 8eea3768ef75470d9bd95f1a91f4a4ee
+          name: 'PV2: Струм'
+          type: TRAP
+          key: deye.pv.channel2.current_a
+          history: 90d
+          units: A
+        - uuid: c5a230d0abfb4624b65600dea84acca5
+          name: 'PV2: Потужність'
+          type: TRAP
+          key: deye.pv.channel2.power_w
+          history: 90d
+          units: W
+        - uuid: 1144b4561e7247469a31cc265580a8a0
+          name: 'PV2: Напруга'
+          type: TRAP
+          key: deye.pv.channel2.voltage_v
+          history: 90d
+          units: V
+        - uuid: 1b306081085049c187505350b397d80f
+          name: 'PV3: Розрахункова потужність V×A'
+          type: TRAP
+          key: deye.pv.channel3.calc_power_w
+          history: 90d
+          units: W
+        - uuid: 930c1d4335564d6d9f6812df2357a616
+          name: 'PV3: Струм'
+          type: TRAP
+          key: deye.pv.channel3.current_a
+          history: 90d
+          units: A
+        - uuid: 4e1b7846a58548769b93faa0b05f4be6
+          name: 'PV3: Потужність'
+          type: TRAP
+          key: deye.pv.channel3.power_w
+          history: 90d
+          units: W
+        - uuid: 424802758bab46ee916773fc744a4502
+          name: 'PV3: Напруга'
+          type: TRAP
+          key: deye.pv.channel3.voltage_v
+          history: 90d
+          units: V
+        - uuid: 00493d132fd54c51b008419eae3e5119
+          name: 'PV4: Розрахункова потужність V×A'
+          type: TRAP
+          key: deye.pv.channel4.calc_power_w
+          history: 90d
+          units: W
+        - uuid: 581c258430354cdc920541af9d11136b
+          name: 'PV4: Струм'
+          type: TRAP
+          key: deye.pv.channel4.current_a
+          history: 90d
+          units: A
+        - uuid: 834b46e307504c09a55c52b4811a7bd9
+          name: 'PV4: Потужність'
+          type: TRAP
+          key: deye.pv.channel4.power_w
+          history: 90d
+          units: W
+        - uuid: c5d36026184e4c9eaf7ffa5cc17f9754
+          name: 'PV4: Напруга'
+          type: TRAP
+          key: deye.pv.channel4.voltage_v
+          history: 90d
+          units: V
+        - uuid: 1c803b08a5eb40f3a5132d3999599246
+          name: 'PV: Вироблено сьогодні'
+          type: TRAP
+          key: deye.pv.energy_today_kwh
+          history: 90d
+          units: kWh
+        - uuid: b0c7b9aa0def48c694dfaf6f92f34313
+          name: 'PV: Загальна потужність'
+          type: TRAP
+          key: deye.pv.power_total_w
+          history: 90d
+          units: W
+        - uuid: 72e0a4e062ca4ed98ea0cadfaa1c45e1
+          name: 'Deye: Стан роботи (код)'
+          type: TRAP
+          key: deye.run_state
+          history: 90d
+        - uuid: 964eae4e8bb54a88a177302d35194099
+          name: 'Deye: Стан роботи'
+          type: TRAP
+          key: deye.run_state_text
+          history: 90d
+          value_type: TEXT
+        - uuid: a080f77749db4bd99cdafe9679a09a0a
+          name: 'Інвертор: Температура AC'
+          type: TRAP
+          key: deye.temp.ac_c
+          history: 90d
+          units: °C
+        - uuid: 0ca849548ad143308668226f13b9da5c
+          name: 'Інвертор: Температура DC'
+          type: TRAP
+          key: deye.temp.dc_c
+          history: 90d
+          units: °C
+        - uuid: 1bbaacf1e16c4c34bc408886cd490433
+          name: 'Помилки: Є попередження Warning'
+          type: TRAP
+          key: deye.warning.active
+          history: 90d
+          triggers:
+            - uuid: e9551623f1a34e4298631873e9fea3da
+              expression: 'last(/Deye SUN-80K SG02HP3/deye.warning.active)=1'
+              name: 'Deye SUN-80K: Попередження — {ITEM.LASTVALUE}'
+              priority: WARNING
+              description: 'Активний один або декілька кодів Wxx. Деталі див. у Warning summary.'
+        - uuid: 118fb477b01843fdbd3838828aa792e8
+          name: 'Помилки: Коди Warning'
+          type: TRAP
+          key: deye.warning.codes
+          history: 90d
+          value_type: TEXT
+        - uuid: c741cc987f1740099f1d47e72890ea25
+          name: 'Помилки: Warning — оригінал + українською'
+          type: TRAP
+          key: deye.warning.summary
+          history: 90d
+          value_type: TEXT

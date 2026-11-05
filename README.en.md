@@ -114,8 +114,3 @@ A full scan can take a long time when addresses are rejected or the device does 
 - `deye.comm.ok` is set to 1 before register reads. It alone does not guarantee successful data collection; check telemetry values and error messages.
 - Missing values (`None`) are not sent. Alarm-register read failures appear as the Ukrainian text “Помилка читання Modbus” (“Modbus read error”).
 
-## Publication checks
-
-Preparation checks exercised FC03 reads against a local simulator, fragmented responses, representative scaling, and alarm decoding. All 71 template keys occur in the script output. The YAML parses and UUID formats are valid. A real `zabbix_sender` 7.0.22 sent 80 metrics, including Ukrainian text, to a local protocol fixture.
-
-These checks do not validate import into a real Zabbix instance or a new hardware connection. The owner reports that the solution already works in their installation. The supplied Python and YAML files are published with their contents unchanged.
